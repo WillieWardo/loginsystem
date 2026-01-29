@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+</head>
+<body>
+
+<h2>Sign Up</h2>
+
+<form id="signup-form">
+  <input type="email" id="email" placeholder="Email" required><br><br>
+  <input type="password" id="password" placeholder="Password" required><br><br>
+  <button>Create account</button>
+</form>
+
+<p id="msg"></p>
+<a href="login.html">Already have an account?</a>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabase = supabase.createClient(
+    "https://cuhbpwepwdgnoqoabhhq.supabase.co",
+    "sb_publishable_tGahKPhVyc0ovrUJSoiaoA_JDeAQcMc"
+  )
+
+  // If logged in already → index
+  supabase.auth.getSession().then(({ data }) => {
+    if (data.session) location.href = "index.html"
+  })
+
+  document.getElementById("signup-form").addEventListener("submit", async e => {
+    e.preventDefault()
+
+    const email = email.value
+    const password = password.value
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password
+    })
+
+    if (error) {
+      msg.textContent = error.message
+    } else {
+      msg.textContent = "Account created. Redirecting..."
+      setTimeout(() => location.href = "index.html", 1000)
+    }
+  })
+</script>
+
+</body>
+</html>

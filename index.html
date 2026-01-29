@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Index</title>
+</head>
+<body>
+
+<h1>You are logged in ✅</h1>
+<button id="logout">Logout</button>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://cuhbpwepwdgnoqoabhhq.supabase.co"
+  const SUPABASE_KEY = "sb_publishable_tGahKPhVyc0ovrUJSoiaoA_JDeAQcMc"
+
+  const supabase = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  )
+
+  // Protect page
+  supabase.auth.getSession().then(({ data }) => {
+    if (!data.session) {
+      window.location.replace("login.html")
+    }
+  })
+
+  document.getElementById("logout").addEventListener("click", async () => {
+    await supabase.auth.signOut()
+    window.location.replace("login.html")
+  })
+</script>
+
+</body>
+</html>
